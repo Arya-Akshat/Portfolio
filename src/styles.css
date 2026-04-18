@@ -144,8 +144,11 @@ img {
 }
 
 .site-nav__brand-mark {
-  width: 1.55rem;
-  height: 1.55rem;
+  width: 1.8rem;
+  height: 1.8rem;
+  display: block;
+  object-fit: contain;
+  flex-shrink: 0;
   opacity: 0.95;
 }
 
