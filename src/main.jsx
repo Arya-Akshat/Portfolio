@@ -3,11 +3,11 @@ import { createRoot } from 'react-dom/client';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { CheckCircle2, Code2, GitBranch, Link2, LoaderCircle, Mail } from 'lucide-react';
 import emailjs from '@emailjs/browser';
-import skillsMarkdown from '../skills.md?raw';
-import projectsMarkdown from '../projects.md?raw';
-import experiencesMarkdown from '../experiences.md?raw';
-import educationMarkdown from '../education.md?raw';
-import certificatesMarkdown from '../certificates.md?raw';
+import skillsMarkdown from '../about/skills.md?raw';
+import projectsMarkdown from '../about/projects.md?raw';
+import experiencesMarkdown from '../about/experiences.md?raw';
+import educationMarkdown from '../about/education.md?raw';
+import certificatesMarkdown from '../about/certificates.md?raw';
 import WebBackground from './components/ui/WebBackground';
 import './styles.css';
 
