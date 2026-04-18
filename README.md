@@ -2,6 +2,8 @@
 
 Data-driven portfolio website built with React + Vite, rendered from markdown content files.
 
+Live URL: https://portfolio-git-master-akshat-aryas-projects.vercel.app/
+
 ## About
 
 - Name: Akshat Arya
