@@ -927,7 +927,7 @@ function App() {
       <header className="site-nav">
         <div className="container site-nav__inner">
           <a className="site-nav__brand" href="#top" aria-label="Back to top">
-            <img src="/person-lines-fill.svg" alt="" className="site-nav__brand-mark" />
+            <img src="/logo-ak.svg" alt="Akshat Arya logo" className="site-nav__brand-mark" />
             <span>Portfolio</span>
           </a>
 

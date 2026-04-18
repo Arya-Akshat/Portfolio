@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">Akshat Arya Logo</title>
+  <desc id="desc">Stylized AK monogram in white.</desc>
+  <g fill="none" stroke="#f4f7fb" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M36 210 L102 44 L168 210" />
+    <path d="M67 132 H137" />
+    <path d="M171 48 V210" />
+    <path d="M219 52 L146 128 L221 210" />
+  </g>
+</svg>
