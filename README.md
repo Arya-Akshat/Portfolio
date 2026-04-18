@@ -1,3 +1,16 @@
-# Portofolio
-Made a simple portfolio website for myself on a saturday evening
-try it out : https://arya-akshat.github.io/Portfolio/
+# Portfolio
+
+Data-driven developer portfolio built with Vite, React, and Framer Motion.
+
+## Local Development
+
+```bash
+npm install
+npm run dev
+```
+
+## Build
+
+```bash
+npm run build
+```
