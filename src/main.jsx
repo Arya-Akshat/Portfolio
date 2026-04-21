@@ -398,16 +398,21 @@ function parseAchievementsMarkdown(markdown) {
       const title = stripPrefix(headingMatch[1]);
       current = {
         title,
-        items: [],
+        description: '',
+        link: '',
       };
       return;
     }
 
-    const bulletMatch = line.match(/^[-*]\s+(.+)$/);
-    if (bulletMatch) {
-      const item = cleanMultiline(bulletMatch[1]);
-      if (current) {
-        current.items.push(item);
+    const bulletMatch = line.match(/^[-*]\s+([^:]+):\s*(.*)$/);
+    if (bulletMatch && current) {
+      const key = bulletMatch[1].toLowerCase().trim();
+      const value = bulletMatch[2].trim();
+      
+      if (key === 'description') {
+        current.description = value;
+      } else if (key === 'achievement link') {
+        current.link = value;
       }
     }
   });
@@ -417,7 +422,7 @@ function parseAchievementsMarkdown(markdown) {
   }
 
   return {
-    groups: groups.filter((group) => group.items.length > 0),
+    groups: groups.filter((group) => group.description.length > 0),
   };
 }
 
@@ -885,38 +890,34 @@ function ContactSection({ reducedMotion }) {
 }
 
 function AchievementsGrid({ groups, reducedMotion }) {
+  const isValidUrl = (url) => {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
   return (
     <motion.div className="certificate-grid" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
       {groups.map((group) => (
-        <motion.article key={group.title} className="certificate-card" variants={reducedMotion ? fadeIn : fadeUp}>
-          <div className="certificate-card__header">
-            <p className="certificate-card__eyebrow">Achievement</p>
-            <span className="certificate-card__icon" aria-hidden="true">
+        <motion.article key={group.title} className="achievement-card" variants={reducedMotion ? fadeIn : fadeUp}>
+          <div className="achievement-card__header">
+            <p className="achievement-card__eyebrow">Achievement</p>
+            <span className="achievement-card__icon" aria-hidden="true">
               ★
             </span>
           </div>
-          <h3 className="certificate-card__title">{group.title}</h3>
-          <ul className="detail-list detail-list--tight">
-            {group.items.map((item) => {
-              const linkMatch = item.match(/\[([^\]]+)\]\(([^)]+)\)/);
-              if (linkMatch) {
-                const beforeLink = item.substring(0, linkMatch.index);
-                const linkText = linkMatch[1];
-                const linkHref = linkMatch[2];
-                const afterLink = item.substring(linkMatch.index + linkMatch[0].length);
-                return (
-                  <li key={item}>
-                    {beforeLink}
-                    <a href={linkHref} target="_blank" rel="noreferrer">
-                      {linkText}
-                    </a>
-                    {afterLink}
-                  </li>
-                );
-              }
-              return <li key={item}>{item}</li>;
-            })}
-          </ul>
+          <h3 className="achievement-card__title">{group.title}</h3>
+          <p className="achievement-card__description">{group.description}</p>
+          {isValidUrl(group.link) ? (
+            <div className="achievement-card__link">
+              <a href={group.link} target="_blank" rel="noopener noreferrer" className="project-link">
+                Learn More ↗
+              </a>
+            </div>
+          ) : null}
         </motion.article>
       ))}
     </motion.div>
