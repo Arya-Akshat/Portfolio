@@ -398,6 +398,7 @@ function parseAchievementsMarkdown(markdown) {
       const title = stripPrefix(headingMatch[1]);
       current = {
         title,
+        type: 'Achievement',
         description: '',
         link: '',
       };
@@ -411,6 +412,8 @@ function parseAchievementsMarkdown(markdown) {
       
       if (key === 'description') {
         current.description = value;
+      } else if (key === 'type') {
+        current.type = value || 'Achievement';
       } else if (key === 'achievement link') {
         current.link = value;
       }
@@ -904,7 +907,7 @@ function AchievementsGrid({ groups, reducedMotion }) {
       {groups.map((group) => (
         <motion.article key={group.title} className="achievement-card" variants={reducedMotion ? fadeIn : fadeUp}>
           <div className="achievement-card__header">
-            <p className="achievement-card__eyebrow">Achievement</p>
+            <p className="achievement-card__eyebrow">{group.type || 'Achievement'}</p>
             <span className="achievement-card__icon" aria-hidden="true">
               ★
             </span>
