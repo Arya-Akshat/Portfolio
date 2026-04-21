@@ -8,6 +8,7 @@ import projectsMarkdown from '../about/projects.md?raw';
 import experiencesMarkdown from '../about/experiences.md?raw';
 import educationMarkdown from '../about/education.md?raw';
 import certificatesMarkdown from '../about/certificates.md?raw';
+import achievementsMarkdown from '../about/achievements.md?raw';
 import WebBackground from './components/ui/WebBackground';
 import './styles.css';
 
@@ -53,6 +54,7 @@ const navItems = [
   { href: '#experience', label: 'Experience' },
   { href: '#education', label: 'Education' },
   { href: '#certificates', label: 'Certificates' },
+  { href: '#achievements', label: 'Achievements' },
   { href: '#contact', label: 'Contact' },
 ];
 
@@ -383,12 +385,49 @@ function parseCertificatesMarkdown(markdown) {
   };
 }
 
+function parseAchievementsMarkdown(markdown) {
+  const groups = [];
+  let current = null;
+
+  markdown.split(/\r?\n/).forEach((line) => {
+    const headingMatch = line.match(/^##\s+(.+)$/);
+    if (headingMatch) {
+      if (current) {
+        groups.push(current);
+      }
+      const title = stripPrefix(headingMatch[1]);
+      current = {
+        title,
+        items: [],
+      };
+      return;
+    }
+
+    const bulletMatch = line.match(/^[-*]\s+(.+)$/);
+    if (bulletMatch) {
+      const item = cleanMultiline(bulletMatch[1]);
+      if (current) {
+        current.items.push(item);
+      }
+    }
+  });
+
+  if (current) {
+    groups.push(current);
+  }
+
+  return {
+    groups: groups.filter((group) => group.items.length > 0),
+  };
+}
+
 const portfolioData = {
   skills: parseSkillsMarkdown(skillsMarkdown),
   projects: parseProjectsMarkdown(projectsMarkdown),
   experience: parseExperienceMarkdown(experiencesMarkdown),
   education: parseEducationMarkdown(educationMarkdown),
   certificates: parseCertificatesMarkdown(certificatesMarkdown),
+  achievements: parseAchievementsMarkdown(achievementsMarkdown),
 };
 
 function joinValues(values) {
@@ -845,6 +884,45 @@ function ContactSection({ reducedMotion }) {
   );
 }
 
+function AchievementsGrid({ groups, reducedMotion }) {
+  return (
+    <motion.div className="certificate-grid" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
+      {groups.map((group) => (
+        <motion.article key={group.title} className="certificate-card" variants={reducedMotion ? fadeIn : fadeUp}>
+          <div className="certificate-card__header">
+            <p className="certificate-card__eyebrow">Achievement</p>
+            <span className="certificate-card__icon" aria-hidden="true">
+              ★
+            </span>
+          </div>
+          <h3 className="certificate-card__title">{group.title}</h3>
+          <ul className="detail-list detail-list--tight">
+            {group.items.map((item) => {
+              const linkMatch = item.match(/\[([^\]]+)\]\(([^)]+)\)/);
+              if (linkMatch) {
+                const beforeLink = item.substring(0, linkMatch.index);
+                const linkText = linkMatch[1];
+                const linkHref = linkMatch[2];
+                const afterLink = item.substring(linkMatch.index + linkMatch[0].length);
+                return (
+                  <li key={item}>
+                    {beforeLink}
+                    <a href={linkHref} target="_blank" rel="noreferrer">
+                      {linkText}
+                    </a>
+                    {afterLink}
+                  </li>
+                );
+              }
+              return <li key={item}>{item}</li>;
+            })}
+          </ul>
+        </motion.article>
+      ))}
+    </motion.div>
+  );
+}
+
 function CertificateGrid({ groups, links, reducedMotion }) {
   return (
     <motion.div className="certificate-grid" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
@@ -1095,6 +1173,16 @@ function App() {
             <CertificateGrid
               groups={portfolioData.certificates.groups}
               links={portfolioData.certificates.links}
+              reducedMotion={reducedMotion}
+            />
+          </div>
+        </section>
+
+        <section id="achievements" className="section section--base">
+          <div className="container">
+            <SectionTitle title="Achievements & Interests" />
+            <AchievementsGrid
+              groups={portfolioData.achievements.groups}
               reducedMotion={reducedMotion}
             />
           </div>
