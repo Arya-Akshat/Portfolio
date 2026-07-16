@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring } from 'framer-motion';
 import { CheckCircle2, Code2, GitBranch, Link2, LoaderCircle, Mail } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import skillsMarkdown from '../about/skills.md?raw';
@@ -580,17 +580,42 @@ function SkillGroupCard({ group }) {
 }
 
 function ProjectCard({ project, index, featured, reducedMotion, cardRef }) {
+  const [expanded, setExpanded] = useState(false);
   const description = project.description.join(' ');
   const duration = estimateDuration(project, index);
   const liveUrl = normalizeTextValue(project.liveLink);
   const repositoryUrl = normalizeTextValue(project.repositoryLink);
   const hasLiveUrl = isValidProjectUrl(liveUrl);
   const hasRepoUrl = isValidProjectUrl(repositoryUrl);
+  const internalRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    if (reducedMotion) return;
+    const card = internalRef.current;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    card.style.setProperty('--mouse-x', `${x}px`);
+    card.style.setProperty('--mouse-y', `${y}px`);
+  };
+
+  const setRefs = (node) => {
+    internalRef.current = node;
+    if (cardRef) {
+      if (typeof cardRef === 'function') {
+        cardRef(node);
+      } else {
+        cardRef.current = node;
+      }
+    }
+  };
 
   return (
     <motion.article
-      ref={cardRef}
-      className={`project-card ${featured ? 'project-card--featured' : 'project-card--compact'}`}
+      ref={setRefs}
+      onMouseMove={handleMouseMove}
+      className={`project-card ${featured ? 'project-card--featured' : 'project-card--compact'} ${expanded ? 'project-card--expanded' : ''}`}
       variants={reducedMotion ? fadeIn : fadeUp}
       initial="hidden"
       animate="visible"
@@ -608,20 +633,55 @@ function ProjectCard({ project, index, featured, reducedMotion, cardRef }) {
         </div>
 
         {project.role ? <p className="project-card__role">{project.role}</p> : null}
-        <p className={`project-card__description ${featured ? '' : 'line-clamp-2'}`.trim()}>{description}</p>
+        <p className={`project-card__description ${featured || expanded ? '' : 'line-clamp-2'}`.trim()}>{description}</p>
 
-        {project.keyContributions.length > 0 ? (
-          <div className="project-card__section">
-            <p className="project-card__section-label">Highlights</p>
-            <ul className="detail-list detail-list--tight">
-              {project.keyContributions.slice(0, featured ? project.keyContributions.length : 2).map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
+        <AnimatePresence initial={false}>
+          {expanded ? (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1, transition: { duration: 0.3, ease: 'easeOut' } }}
+              exit={{ height: 0, opacity: 0, transition: { duration: 0.25, ease: 'easeIn' } }}
+              style={{ overflow: 'hidden' }}
+            >
+              {project.keyContributions.length > 0 ? (
+                <div className="project-card__section project-card__section--expanded">
+                  <p className="project-card__section-label">Key Contributions</p>
+                  <ul className="detail-list">
+                    {project.keyContributions.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
+              {project.outcome.length > 0 ? (
+                <div className="project-card__section project-card__section--expanded">
+                  <p className="project-card__section-label">Impact / Outcome</p>
+                  <ul className="detail-list detail-list--accent">
+                    {project.outcome.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </motion.div>
+          ) : (
+            project.keyContributions.length > 0 ? (
+              <div className="project-card__section">
+                <p className="project-card__section-label">Highlights</p>
+                <ul className="detail-list detail-list--tight">
+                  {project.keyContributions.slice(0, featured ? project.keyContributions.length : 2).map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null
+          )}
+        </AnimatePresence>
+
+        {!expanded && project.outcome.length > 0 ? (
+          <p className="project-card__impact">Impact: {project.outcome[0]}</p>
         ) : null}
-
-        {project.outcome.length > 0 ? <p className="project-card__impact">Impact: {project.outcome[0]}</p> : null}
       </div>
 
       <div className="project-card__footer">
@@ -633,31 +693,65 @@ function ProjectCard({ project, index, featured, reducedMotion, cardRef }) {
           ))}
         </div>
 
-        {hasRepoUrl || hasLiveUrl ? (
-          <div className="project-card__links">
-            {hasRepoUrl ? (
-              <a href={repositoryUrl} target="_blank" rel="noopener noreferrer" className="project-link">
-                Repo
-              </a>
-            ) : null}
-            {hasLiveUrl ? (
-              <a href={liveUrl} target="_blank" rel="noopener noreferrer" className="project-link">
-                Live ↗
-              </a>
-            ) : null}
-          </div>
-        ) : (
-          <p className="project-card__privacy">Private</p>
-        )}
+        <div className="project-card__actions">
+          {hasRepoUrl || hasLiveUrl ? (
+            <div className="project-card__links">
+              {hasRepoUrl ? (
+                <a href={repositoryUrl} target="_blank" rel="noopener noreferrer" className="project-link">
+                  Repo
+                </a>
+              ) : null}
+              {hasLiveUrl ? (
+                <a href={liveUrl} target="_blank" rel="noopener noreferrer" className="project-link">
+                  Live ↗
+                </a>
+              ) : null}
+            </div>
+          ) : (
+            <p className="project-card__privacy">Private</p>
+          )}
+
+          <button
+            type="button"
+            className="project-card__toggle-btn"
+            onClick={() => setExpanded(!expanded)}
+          >
+            {expanded ? 'Hide Details' : 'Case Study'}
+          </button>
+        </div>
       </div>
     </motion.article>
   );
 }
 
 function ExperienceTimeline({ entries, reducedMotion }) {
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start end', 'end center'],
+  });
+  const scaleY = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
   return (
-    <motion.div className="timeline" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
+    <motion.div
+      ref={containerRef}
+      className="timeline"
+      variants={staggerContainer}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-80px' }}
+    >
       <span className="timeline__line" />
+      {!reducedMotion ? (
+        <motion.div
+          className="timeline__line-progress"
+          style={{ scaleY, originY: 0 }}
+        />
+      ) : null}
       {entries.map((entry, index) => {
         const summary = joinValues([entry.location, entry.employmentType, entry.startDate, entry.endDate]);
         return (
@@ -714,9 +808,33 @@ function ExperienceTimeline({ entries, reducedMotion }) {
 }
 
 function EducationTimeline({ entries, reducedMotion }) {
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start end', 'end center'],
+  });
+  const scaleY = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
   return (
-    <motion.div className="timeline" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
+    <motion.div
+      ref={containerRef}
+      className="timeline"
+      variants={staggerContainer}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-80px' }}
+    >
       <span className="timeline__line" />
+      {!reducedMotion ? (
+        <motion.div
+          className="timeline__line-progress"
+          style={{ scaleY, originY: 0 }}
+        />
+      ) : null}
       {entries.map((entry, index) => {
         const isJeeMains = entry.title.toLowerCase().includes('jee mains');
         let metrics = [entry.duration, entry.location, entry.cgpa, entry.score, entry.academicYear, entry.year].filter(Boolean);
@@ -748,6 +866,47 @@ function EducationTimeline({ entries, reducedMotion }) {
         );
       })}
     </motion.div>
+  );
+}
+
+function Typewriter({ words, defaultWord, speed = 80, delay = 2500, reducedMotion }) {
+  if (reducedMotion) {
+    return <span>{defaultWord}</span>;
+  }
+
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [currentText, setCurrentText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    let timer;
+    const fullWord = words[currentWordIndex];
+    
+    if (isDeleting) {
+      timer = setTimeout(() => {
+        setCurrentText(fullWord.substring(0, currentText.length - 1));
+      }, speed / 2);
+    } else {
+      timer = setTimeout(() => {
+        setCurrentText(fullWord.substring(0, currentText.length + 1));
+      }, speed);
+    }
+
+    if (!isDeleting && currentText === fullWord) {
+      timer = setTimeout(() => setIsDeleting(true), delay);
+    } else if (isDeleting && currentText === '') {
+      setIsDeleting(false);
+      setCurrentWordIndex((prev) => (prev + 1) % words.length);
+    }
+
+    return () => clearTimeout(timer);
+  }, [currentText, isDeleting, currentWordIndex, words, speed, delay]);
+
+  return (
+    <span className="typewriter">
+      {currentText}
+      <span className="typewriter__cursor">|</span>
+    </span>
   );
 }
 
@@ -1077,7 +1236,16 @@ function App() {
             </motion.h1>
 
             <motion.p className="hero__role" variants={reducedMotion ? fadeIn : fadeUp} initial="hidden" animate="visible" transition={{ delay: 0.08 }}>
-              {personalDetails.role}
+              <Typewriter
+                words={[
+                  'AI/ML Engineer & Backend Developer',
+                  'Systems builder & Full-Stack developer',
+                  'Samsung Deepfake Audio Researcher',
+                  'Notion AI Challenge 2026 Winner'
+                ]}
+                defaultWord={personalDetails.role}
+                reducedMotion={reducedMotion}
+              />
             </motion.p>
 
             <motion.p className="hero__summary" variants={reducedMotion ? fadeIn : fadeUp} initial="hidden" animate="visible" transition={{ delay: 0.14 }}>
