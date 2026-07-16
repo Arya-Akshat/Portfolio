@@ -62,7 +62,7 @@ const personalDetails = {
   name: 'Akshat Arya',
   role: 'AI/ML Engineer & Backend Developer',
   summary:
-    'Computer Science student focused on AI/ML and distributed systems, with experience building deep learning models, LLM-powered applications, and scalable microservices platforms. Skilled in ML pipelines, model optimization, and backend systems for production-grade AI applications. Seeking opportunities in ML engineering, AI systems, or distributed systems.',
+    'Third-year CS student with research experience at Samsung on deepfake audio detection and a track record of shipping full-stack AI applications, from fine-tuned speech models to agentic workflow systems. Won the Notion AI Challenge 2026 (MLH) and reached the finals of the Meta PyTorch Hackathon out of 31,000+ teams. Seeking roles in ML engineering or AI systems development.',
   email: 'akshat.arya13@gmail.com',
   github: 'https://github.com/Arya-Akshat',
   linkedin: 'https://www.linkedin.com/in/akshat-arya-82b4b724b/',

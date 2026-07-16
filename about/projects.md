@@ -1,6 +1,57 @@
 ## ⭐ Star Projects
 
 ## Project 1
+- Title: AdeptAI – Production AI Assessment Platform
+- Duration: May 2026 – June 2026
+- Description:
+  - AI platform that transforms uploaded course material into rubric-aligned assessments, question banks, presentation decks, and learning roadmaps within multi-class collaborative workspaces.
+- Tech Stack:
+  - React.js
+  - FastAPI
+  - BullMQ
+  - Redis
+  - Socket.io
+- Role:
+  - Full-Stack & AI Systems Developer
+- Key Contributions:
+  - Async pipeline using BullMQ and Redis offloads long-running LLM workflows from the request path, streaming real-time job status via Socket.io.
+  - Document parsing isolated in a dedicated FastAPI microservice.
+- Outcome / Impact:
+  - Enabled scalable, real-time generation of educational materials within collaborative workspaces.
+- Live Link:
+  - Not Available
+- Repository Link:
+  - https://github.com/Arya-Akshat/Adept_AI
+
+---
+
+## Project 2
+- Title: CloudDash – Multi-Agent Support Engine
+- Duration: February 2026 – April 2026
+- Description:
+  - Stateful multi-agent support engine featuring intent classification, dynamic agent orchestration, and context preservation across handoffs.
+- Tech Stack:
+  - LangGraph
+  - ChromaDB
+  - FastAPI
+  - Redis
+  - Python
+- Role:
+  - AI & Backend Engineer
+- Key Contributions:
+  - Designed a LangGraph multi-agent system where a Triage agent classifies intent and orchestrates specialist agents (Billing, Technical, Escalation) through stateful workflow transitions.
+  - Hybrid retrieval combining ChromaDB vector search and BM25 via Reciprocal Rank Fusion (RRF).
+  - Layered guardrails for PII masking, prompt injection, and response validation with session-aware memory and pluggable Redis-backed persistence.
+- Outcome / Impact:
+  - Created a robust support engine with context-aware agent coordination and rigorous security validation.
+- Live Link:
+  - Not Available
+- Repository Link:
+  - https://github.com/Arya-Akshat/multi-agent-rag-support
+
+---
+
+## Project 3
 - Title: NotionOS – AI Agent Operating Layer
 - Duration: Not Specified
 - Description:
@@ -32,31 +83,26 @@
 
 ---
 
-## Project 2
-- Title: FileForge – Distributed File Processing Platform
-- Duration: Not Specified
+## Project 4
+- Title: FileForge – Cloud-Native File Processing Platform
+- Duration: October 2025 – December 2025
 - Description:
-  - Designed and developed a production-grade cloud-based file processing system demonstrating microservices, distributed systems, and asynchronous processing.
-  - Supports file uploads, processing pipelines, and AI-powered tagging using scalable architecture.
+  - Event-driven platform where uploads trigger async workflows for transcoding, malware scanning, and AES-256 encryption via RabbitMQ service orchestration, with MinIO for S3-compatible object storage.
 - Tech Stack:
   - FastAPI
-  - React.js
-  - PostgreSQL
-  - MinIO
+  - Docker
   - RabbitMQ
-  - Docker Compose
-  - NGINX
+  - MinIO
   - Python
 - Role:
   - Full-Stack & System Design Engineer
 - Key Contributions:
-  - Architected a microservices-based system with separate workers for image, video, security, and AI processing
-  - Implemented asynchronous job queue using RabbitMQ for scalable processing
-  - Built secure file upload system using presigned URLs and JWT authentication
-  - Developed distributed worker pipelines for processing, encryption, and AI tagging
+  - Independently deployable FastAPI microservices containerized with Docker and CI/CD-driven rolling deployments, enabling fault isolation and zero-downtime updates.
+  - Architected a microservices-based system with separate workers for image, video, security, and AI processing.
+  - Implemented asynchronous job queue using RabbitMQ for scalable processing.
+  - Built secure file upload system using presigned URLs and JWT authentication.
 - Outcome / Impact:
-  - Demonstrated real-world distributed system design patterns similar to large-scale platforms
-  - Built a scalable and extensible file processing infrastructure
+  - Demonstrated real-world distributed system design patterns enabling fault isolation and zero-downtime updates.
 - Live Link:
   - Not Available
 - Repository Link:
@@ -64,7 +110,7 @@
 
 ---
 
-## Project 3
+## Project 5
 - Title: AI Lawyer – Legal Case Management Platform
 - Duration: Not Specified
 - Description:
@@ -96,7 +142,7 @@
 
 ---
 
-## Project 4
+## Project 6
 - Title: AdSync Personalizer – AI Landing Page Optimization System
 - Duration: Not Specified
 - Description:
@@ -127,7 +173,7 @@
 
 ---
 
-## Project 5
+## Project 7
 - Title: BookLens AI – Document Intelligence Platform
 - Duration: Not Specified
 - Description:
@@ -157,7 +203,7 @@
 
 ---
 
-## Project 6
+## Project 8
 - Title: Deepfake Audio Detection – Samsung Research Project
 - Duration: Not Specified
 - Description:
@@ -187,7 +233,7 @@
 
 ---
 
-## Project 7
+## Project 9
 - Title: Job Recommendation System
 - Duration: Not Specified
 - Description:
@@ -220,7 +266,7 @@
 
 ## 🟡 Good Projects
 
-## Project 8
+## Project 10
 - Title: SyncBridge – Unified Integration Platform
 - Duration: Not Specified
 - Description:
@@ -248,7 +294,7 @@
 
 ---
 
-## Project 9
+## Project 11
 - Title: StockSense AI – Stock Data Intelligence Dashboard
 - Duration: Not Specified
 - Description:
@@ -279,7 +325,7 @@
 
 ---
 
-## Project 10
+## Project 12
 - Title: Credit Approval System
 - Duration: Not Specified
 - Description:
@@ -307,7 +353,7 @@
 
 ---
 
-## Project 11
+## Project 13
 - Title: Digital Heroes Golf Platform
 - Duration: Not Specified
 - Description:
@@ -337,7 +383,7 @@
 
 ## 🧪 Additional / Other Projects
 
-## Project 12
+## Project 14
 - Title: Traffic Signal OpenEnv – RL Simulation Environment
 - Duration: Not Specified
 - Description:
@@ -364,7 +410,7 @@
 
 ---
 
-## Project 13
+## Project 15
 - Title: Binance Futures Testnet CLI Trading Bot
 - Duration: Not Specified
 - Description:
@@ -389,7 +435,7 @@
 
 ---
 
-## Project 14
+## Project 16
 - Title: Sudoku Solver and GUI Application
 - Duration: Not Specified
 - Description:
