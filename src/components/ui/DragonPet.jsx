@@ -72,6 +72,7 @@ export default function DragonPet({ reducedMotion, factsMarkdown }) {
 
   const isHoveredRef = useRef(false);
   const clickTimeout = useRef(null);
+  const messagesEndRef = useRef(null);
 
   // Parse facts dynamically from factsMarkdown prop
   useEffect(() => {
@@ -82,6 +83,13 @@ export default function DragonPet({ reducedMotion, factsMarkdown }) {
       .map((line) => line.trim().replace(/^-\s*/, ''));
     setFactsList(parsed);
   }, [factsMarkdown]);
+
+  // Auto-scroll chat history to the bottom when new messages arrive
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [chatHistory, chatOpen]);
 
   // Track global cursor coordinate in page
   useEffect(() => {
@@ -742,13 +750,13 @@ export default function DragonPet({ reducedMotion, factsMarkdown }) {
                 </button>
               </div>
 
-              {/* Chat body containing history */}
               <div className="dragon-chat-messages">
                 {chatHistory.map((msg, index) => (
                   <div key={index} className={`chat-bubble ${msg.sender}`}>
                     {renderMessageText(msg.text)}
                   </div>
                 ))}
+                <div ref={messagesEndRef} />
               </div>
 
               {/* Quick suggestions panels - only show before conversation begins */}
