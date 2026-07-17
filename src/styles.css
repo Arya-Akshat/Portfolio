@@ -143,12 +143,14 @@ img {
 }
 
 .site-nav {
-  position: sticky;
+  position: fixed;
   top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 40;
   width: calc(100% - 2rem);
   max-width: var(--container);
-  margin: 0.75rem auto 0 auto;
+  margin: 0;
   border-radius: 999px;
   background: rgba(13, 17, 23, 0.75);
   backdrop-filter: blur(12px);
@@ -291,9 +293,9 @@ img {
   z-index: 1;
   display: grid;
   gap: 1.5rem;
-  min-height: calc(100vh - 4.75rem);
+  min-height: 100vh;
   align-content: center;
-  padding: 4rem 0 3rem;
+  padding: 4rem 0 9rem;
 }
 
 .hero__backdrop {
@@ -1188,7 +1190,7 @@ img {
 
   .hero__inner {
     min-height: auto;
-    padding-top: 3rem;
+    padding-top: 6.5rem;
   }
 
   .hero__title {
@@ -1242,6 +1244,353 @@ img {
 @keyframes typewriter-blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+
+/* Dragon Pet Web Styling */
+.dragon-fixed-wrapper {
+  position: fixed;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  will-change: left, top;
+}
+
+.dragon-container {
+  width: 96px;
+  height: 104px;
+  overflow: hidden;
+  position: relative;
+  cursor: grab;
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  transform-origin: bottom center;
+}
+
+.dragon-container:active {
+  cursor: grabbing;
+}
+
+.dragon-img {
+  width: 768px !important;
+  height: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+  display: block;
+  position: absolute;
+  pointer-events: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.dragon-controls {
+  display: flex;
+  gap: 0.35rem;
+  padding: 0.3rem 0.5rem;
+  background: rgba(13, 17, 23, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-default);
+  border-radius: 999px;
+  opacity: 0;
+  transform: translateY(5px);
+  pointer-events: auto;
+  transition: all 0.25s ease;
+  margin-bottom: -15px;
+  z-index: 10;
+}
+
+.dragon-fixed-wrapper:hover .dragon-controls {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dragon-ctrl-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.dragon-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-2px);
+  padding: 0.25rem 0.45rem;
+  background: rgba(13, 17, 23, 0.95);
+  border: 1px solid var(--border-default);
+  color: var(--text-primary);
+  font-size: 0.62rem;
+  font-weight: 500;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+.dragon-ctrl-btn:hover .dragon-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-6px);
+}
+
+.dragon-ctrl-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dragon-ctrl-btn.active {
+  color: var(--accent-primary);
+  background: rgba(59, 130, 246, 0.15);
+}
+
+.dragon-ctrl-btn.close:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Chat Window */
+.dragon-chat-window {
+  position: absolute;
+  bottom: 120px;
+  right: 0;
+  width: 320px;
+  max-height: 420px;
+  background: rgba(22, 27, 34, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(59, 130, 246, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  pointer-events: auto;
+  z-index: 100;
+}
+
+.dragon-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-default);
+  background: rgba(13, 17, 23, 0.5);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.dragon-chat-header button {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.dragon-chat-header button:hover {
+  color: var(--text-primary);
+}
+
+.dragon-chat-messages {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 220px;
+}
+
+.chat-bubble {
+  max-width: 85%;
+  padding: 0.6rem 0.8rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
+.chat-bubble.dragon {
+  align-self: flex-start;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  color: var(--text-primary);
+}
+
+.chat-bubble.user {
+  align-self: flex-end;
+  background: var(--accent-gradient);
+  color: white;
+}
+
+.dragon-chat-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-top: 1px solid var(--border-default);
+  background: rgba(13, 17, 23, 0.2);
+}
+
+.dragon-chat-suggestions button {
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-default);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dragon-chat-suggestions button:hover {
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+  background: var(--bg-subtle);
+}
+
+.dragon-chat-input-bar {
+  display: flex;
+  padding: 0.75rem;
+  border-top: 1px solid var(--border-default);
+  gap: 0.5rem;
+  background: rgba(13, 17, 23, 0.4);
+}
+
+.dragon-chat-input-bar input {
+  flex: 1;
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-default);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-size: 0.82rem;
+}
+
+.dragon-chat-input-bar input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+}
+
+.dragon-chat-input-bar button {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent-gradient);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.dragon-chat-input-bar button:hover {
+  opacity: 0.9;
+}
+
+/* Flame particles */
+.dragon-flame-particle {
+  position: fixed;
+  z-index: 10000;
+  pointer-events: none;
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* Summon Button - Fiery red styling with animations */
+.summon-dragon-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 9999;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  border: 2px solid #ef4444; /* Fiery red border */
+  background: rgba(13, 17, 23, 0.9);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3), 0 0 15px rgba(239, 68, 68, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: flame-pulse 2s infinite ease-in-out;
+}
+
+.summon-dragon-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 25px rgba(239, 68, 68, 0.6), 0 0 25px rgba(249, 115, 22, 0.4);
+}
+
+.summon-dragon-text {
+  font-size: 1.6rem;
+  line-height: 1;
+  animation: dragon-float 2.5s infinite ease-in-out;
+  display: block;
+}
+
+.summon-dragon-tooltip {
+  position: absolute;
+  bottom: 120%;
+  right: 50%;
+  transform: translateX(50%) translateY(2px);
+  padding: 0.3rem 0.6rem;
+  background: rgba(13, 17, 23, 0.95); /* Dark background */
+  border: 1px solid rgba(255, 77, 77, 0.45); /* Brighter subtle red border */
+  color: #ff6b6b; /* Brighter glowing red-coral text */
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 0 8px rgba(255, 107, 107, 0.9), 0 0 3px rgba(249, 115, 22, 0.7); /* Brighter lava glow */
+  z-index: 1000;
+}
+
+.summon-dragon-btn:hover .summon-dragon-tooltip {
+  opacity: 1;
+  transform: translateX(50%) translateY(-4px);
+}
+
+@keyframes flame-pulse {
+  0% {
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3), 0 0 10px rgba(239, 68, 68, 0.2);
+    border-color: #ef4444;
+  }
+  50% {
+    box-shadow: 0 4px 25px rgba(239, 68, 68, 0.6), 0 0 25px rgba(249, 115, 22, 0.4);
+    border-color: #f97316; /* Orange */
+  }
+  100% {
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3), 0 0 10px rgba(239, 68, 68, 0.2);
+    border-color: #ef4444;
+  }
+}
+
+@keyframes dragon-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
 }
 
 @media (prefers-reduced-motion: reduce) {

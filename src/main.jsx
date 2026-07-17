@@ -9,7 +9,9 @@ import experiencesMarkdown from '../about/experiences.md?raw';
 import educationMarkdown from '../about/education.md?raw';
 import certificatesMarkdown from '../about/certificates.md?raw';
 import achievementsMarkdown from '../about/achievements.md?raw';
+import factsMarkdown from '../about/facts.md?raw';
 import WebBackground from './components/ui/WebBackground';
+import DragonPet from './components/ui/DragonPet';
 import './styles.css';
 
 const BATCH_SIZE = 4;
@@ -1164,6 +1166,7 @@ function App() {
   return (
     <div className="page-shell">
       <WebBackground />
+      <DragonPet reducedMotion={reducedMotion} factsMarkdown={factsMarkdown} />
 
       <header className="site-nav">
         <div className="container site-nav__inner">
