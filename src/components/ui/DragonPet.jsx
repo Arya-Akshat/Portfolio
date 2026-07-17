@@ -18,6 +18,8 @@ const STATE_ROWS = {
   sit: 3,        // Row 3 is actually sitting!
   idle_alt: 8,
   backflip: 9,   // Row 9 is our new 360 backflip sequence!
+  use_laptop: 10,
+  eat_snacks: 11,
 };
 
 const MOODS = ['calm', 'lazy', 'energetic'];
@@ -57,6 +59,8 @@ export default function DragonPet({ reducedMotion, factsMarkdown }) {
   const jumpEndTime = useRef(0);
   const fireEndTime = useRef(0);
   const backflipEndTime = useRef(0);
+  const laptopEndTime = useRef(0);
+  const snacksEndTime = useRef(0);
   const currentFrame = useRef(0);
   const animationTick = useRef(0);
   const recoilStart = useRef(0);
@@ -133,15 +137,23 @@ export default function DragonPet({ reducedMotion, factsMarkdown }) {
       // State machine logic
       if (backflipEndTime.current > now) {
         newState = 'backflip';
+      } else if (laptopEndTime.current > now) {
+        newState = 'use_laptop';
+      } else if (snacksEndTime.current > now) {
+        newState = 'eat_snacks';
       } else if (fireEndTime.current > now) {
         newState = 'spit_fire';
       } else if (!followCursor || distance < IDLE_DISTANCE) {
-        const idleDuration = 32000; // 32s loop cycle (8s per state)
+        const idleDuration = 48000; // 48s loop cycle (8s per state)
         const idleTime = (now - idleStartTime.current) % idleDuration;
 
         if (isFastMove && jumpEndTime.current < now && followCursor) {
           newState = 'jump';
           jumpEndTime.current = now + 600;
+        } else if (idleTime > 40000) {
+          newState = 'eat_snacks'; // Eating snacks (Row 11)
+        } else if (idleTime > 32000) {
+          newState = 'use_laptop'; // Working on laptop (Row 10)
         } else if (idleTime > 24000) {
           newState = 'idle_alt'; // Idle variation (Row 8)
         } else if (idleTime > 16000) {
@@ -456,6 +468,25 @@ export default function DragonPet({ reducedMotion, factsMarkdown }) {
         }
         return "Akshat is an avid chess player rated ~1200 on Chess.com, and loves systems programming!";
       }
+      if (lastTopic.current === 'laptop') {
+        return "I'm currently working on a custom compiler to build my new language, optimizing NotionOS workflows, and managing multiple agentic LLM chains using LangGraph!";
+      }
+      if (lastTopic.current === 'snacks') {
+        return "Warm popcorn, chips, and pixel cookies are my absolute favorite snacks! They give me the energy to write clean code and spit fire.";
+      }
+    }
+
+    if (query.includes('laptop') || query.includes('code') || query.includes('work') || query.includes('program') || query.includes('compile')) {
+      lastTopic.current = 'laptop';
+      laptopEndTime.current = Date.now() + 5000; // Code on laptop for 5 seconds
+      setCurrentState('use_laptop');
+      return "Sure thing! Watch me type away on my miniature laptop. 💻 *clack clack clack* I am currently coding NotionOS!";
+    }
+    if (query.includes('eat') || query.includes('snack') || query.includes('food') || query.includes('hungry') || query.includes('popcorn') || query.includes('cookie')) {
+      lastTopic.current = 'snacks';
+      snacksEndTime.current = Date.now() + 5000; // Eat snacks for 5 seconds
+      setCurrentState('eat_snacks');
+      return "Yum! 🍿 *munch munch munch* These snacks are delicious! Thanks for feeding me.";
     }
 
     if (query.includes('flip') || query.includes('backflip') || query.includes('spin')) {
@@ -725,7 +756,7 @@ export default function DragonPet({ reducedMotion, factsMarkdown }) {
         >
           <img
             className="dragon-img"
-            src="/spritesheet.webp?v=42"
+            src="/spritesheet.webp?v=50"
             alt="Companion Dragon"
             style={{
               transform: `translate(${-xOffset}px, ${-yOffset}px)`,
