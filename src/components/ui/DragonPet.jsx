@@ -756,7 +756,7 @@ export default function DragonPet({ reducedMotion, factsMarkdown }) {
         >
           <img
             className="dragon-img"
-            src="/spritesheet.webp?v=55"
+            src="/spritesheet.webp?v=60"
             alt="Companion Dragon"
             style={{
               transform: `translate(${-xOffset}px, ${-yOffset}px)`,
